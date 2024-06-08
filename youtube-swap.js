@@ -1,12 +1,13 @@
 // ==UserScript==
-// @name         YouTube swap comments and recommendation
+// @name         YouTube swap comments and recommendations
 // @namespace    https://github.com/zenpk/scripts-tampermonkey
 // @version      2024-06-08
-// @description  Provide a button to swap the comments section (bottom) and the recommendation section (right)
+// @description  Provide a button to swap the comments section (bottom) and the recommendations section (right)
 // @author       zenpk
 // @match        https://www.youtube.com
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
+// @license      MIT
 // ==/UserScript==
 
 (function () {
