@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         YouTube swap comments and recommendations
 // @namespace    https://github.com/zenpk/scripts-tampermonkey
-// @version      2024-06-08
+// @version      0.1
 // @description  Provide a button to swap the comments section (bottom) and the recommendations section (right)
 // @author       zenpk
-// @match        https://www.youtube.com
+// @match        https://www.youtube.com/watch
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
 // @license      MIT
+// @downloadURL https://update.greasyfork.org/scripts/497343/YouTube%20swap%20comments%20and%20recommendations.user.js
+// @updateURL https://update.greasyfork.org/scripts/497343/YouTube%20swap%20comments%20and%20recommendations.meta.js
 // ==/UserScript==
 
 (function () {
