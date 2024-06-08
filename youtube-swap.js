@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         YouTube swap comments and recommendations
 // @namespace    https://github.com/zenpk/scripts-tampermonkey
-// @version      0.2
-// @description  Provide a button to swap the comments section (bottom) and the recommendations section (right)
+// @version      0.4
+// @description  Provide a button to swap the comments section (bottom) and the recommendations section (right).
 // @author       zenpk
 // @match        https://www.youtube.com/watch*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
@@ -13,14 +13,10 @@
 // ==/UserScript==
 
 (function () {
-  "use strict";
   const timeoutValue = 200;
-  const topLevelButtonsQuery =
-    "#actions-inner > #menu > ytd-menu-renderer > #top-level-buttons-computed";
-
   function waitForLoaded() {
     const shareButton = document.querySelector(
-      `${topLevelButtonsQuery} > yt-button-view-model`
+      `#actions-inner > #menu > ytd-menu-renderer > #top-level-buttons-computed > yt-button-view-model`
     );
     console.log(
       `[Swap script] trying to find the share button: ${shareButton}`
@@ -34,10 +30,22 @@
 
   waitForLoaded();
 
+  let swapped = false;
+  let buttonParent;
+  let swapButton;
+  let comments;
+  let contents;
+  let commentsParent;
+  let contentsParent;
+  let commentsParentWidth;
+  let contentsParentWidth;
+  let commentsParentWidthBackup;
+  let contentsParentWidthBackup;
   function addSwapButton() {
-    const buttonParent =
-      document.querySelector(topLevelButtonsQuery).parentNode;
-    const swapButton = document.createElement("button");
+    buttonParent = document.querySelector(
+      "#above-the-fold > #top-row > #owner"
+    );
+    swapButton = document.createElement("button");
     swapButton.innerHTML = "Swap";
     swapButton.addEventListener("click", swapSections);
     swapButton.classList.add(
@@ -48,14 +56,21 @@
       "yt-spec-button-shape-next--icon-leading"
     );
     swapButton.style.marginLeft = "0.75rem";
+    swapButton.style.maxWidth = "fit-content";
     buttonParent.appendChild(swapButton);
-    const comments = document.querySelector("#comments");
-    const contents = document.querySelector(
+    comments = document.querySelector("#comments");
+    contents = document.querySelector(
       "#related > ytd-watch-next-secondary-results-renderer > #items > ytd-rich-grid-renderer > #contents"
     );
-    const commentsParent = comments.parentNode;
-    const contentsParent = contents.parentNode;
-    let swapped = false;
+    if (!contents) {
+      contents = document.querySelector(
+        "ytd-page-manager > ytd-watch-flexy > #columns > #secondary > #secondary-inner"
+      );
+    }
+    commentsParent = comments.parentNode;
+    contentsParent = contents.parentNode;
+    commentsParentWidthBackup = commentsParent.style.width;
+    contentsParentWidthBackup = contentsParent.style.width;
 
     function swapSections() {
       if (swapped) {
@@ -63,7 +78,11 @@
         contentsParent.removeChild(comments);
         commentsParent.appendChild(comments);
         contentsParent.appendChild(contents);
+        commentsParent.style.width = commentsParentWidthBackup;
+        contentsParent.style.width = contentsParentWidthBackup;
       } else {
+        commentsParent.style.width = commentsParent.offsetWidth;
+        contentsParent.style.width = contentsParent.offsetWidth;
         commentsParent.removeChild(comments);
         contentsParent.removeChild(contents);
         commentsParent.appendChild(contents);
